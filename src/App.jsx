@@ -1,44 +1,88 @@
 import React, { useState } from 'react';
-import { AppProvider } from './context/AppContext';
+import { AppProvider, useApp } from './context/AppContext';
+import LoginPage from './pages/LoginPage';
 import Sidebar from './components/layout/Sidebar';
 import Header from './components/layout/Header';
 import Dashboard from './components/dashboard/Dashboard';
-import AttendanceLogger from './components/attendance/AttendanceLogger';
-import AttendanceHistory from './components/attendance/AttendanceHistory';
-import ProgressForm from './components/progress/ProgressForm';
-import ProgressList from './components/progress/ProgressList';
-import LeaveForm from './components/leaves/LeaveForm';
-import LeaveHistory from './components/leaves/LeaveHistory';
+import AttendancePage from './components/attendance/AttendancePage';
+import ProgressPage from './components/progress/ProgressPage';
+import LeavePage from './components/leaves/LeavePage';
+import AdminPanel from './components/admin/AdminPanel';
+import ProfilePage from './components/profile/ProfilePage';
+import Toast from './components/ui/Toast';
 
-const TABS = [
-  { id: 'dashboard', label: 'Dashboard' },
-  { id: 'attendance', label: 'Attendance' },
-  { id: 'progress', label: 'Daily Progress' },
-  { id: 'leaves', label: 'Leave Requests' },
+const EMP_TABS = [
+  { id: 'dashboard',  label: 'Dashboard',      icon: 'ti-layout-dashboard' },
+  { id: 'attendance', label: 'Attendance',      icon: 'ti-clock' },
+  { id: 'progress',   label: 'Daily progress',  icon: 'ti-clipboard-check' },
+  { id: 'leaves',     label: 'Leave requests',  icon: 'ti-calendar-off' },
+  { id: 'profile',    label: 'Profile',         icon: 'ti-user' },
 ];
 
-function AppContent() {
+function PortalApp() {
+  const { currentUser, setCurrentUser, leaves } = useApp();
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [toast, setToast] = useState(null);
+
+  const showToast = (msg, type) => setToast({ msg, type });
+
+  if (!currentUser) {
+    return (
+      <LoginPage
+        onLogin={(u) => { setCurrentUser(u); setActiveTab('dashboard'); }}
+      />
+    );
+  }
+
+  const pendingCount = leaves.filter((l) => l.status === 'Pending').length;
+
+  const ADMIN_TABS = [
+    { id: 'dashboard',  label: 'Dashboard',      icon: 'ti-layout-dashboard' },
+    { id: 'attendance', label: 'Attendance',      icon: 'ti-clock' },
+    { id: 'progress',   label: 'Daily progress',  icon: 'ti-clipboard-check' },
+    { id: 'leaves',     label: 'Leave requests',  icon: 'ti-calendar-off' },
+    { id: 'admin',      label: 'Admin panel',     icon: 'ti-shield', badge: pendingCount || undefined },
+    { id: 'profile',    label: 'Profile',         icon: 'ti-user' },
+  ];
+
+  const tabs = currentUser.role === 'admin' ? ADMIN_TABS : EMP_TABS;
+
   const renderContent = () => {
     switch (activeTab) {
-      case 'dashboard': return <Dashboard setActiveTab={setActiveTab} />;
-      case 'attendance': return <div className="space-y-6"><AttendanceLogger /><AttendanceHistory /></div>;
-      case 'progress': return <div className="space-y-6"><ProgressForm /><ProgressList /></div>;
-      case 'leaves': return <div className="space-y-6"><LeaveForm /><LeaveHistory /></div>;
-      default: return null;
+      case 'dashboard':  return <Dashboard setActiveTab={setActiveTab} />;
+      case 'attendance': return <AttendancePage />;
+      case 'progress':   return <ProgressPage />;
+      case 'leaves':     return <LeavePage />;
+      case 'admin':      return <AdminPanel showToast={showToast} />;
+      case 'profile':    return <ProfilePage />;
+      default:           return null;
     }
   };
+
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} tabs={TABS} />
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header activeTab={activeTab} tabs={TABS} />
-        <main className="flex-1 overflow-y-auto p-6">{renderContent()}</main>
+    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#f8fafc' }}>
+      <Sidebar
+        activeTab={activeTab}
+        setTab={setActiveTab}
+        currentUser={currentUser}
+        tabs={tabs}
+        onLogout={() => { setCurrentUser(null); setActiveTab('dashboard'); }}
+      />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <Header activeTab={activeTab} tabs={tabs} currentUser={currentUser} />
+        <main style={{ flex: 1, overflowY: 'auto', padding: 22 }}>
+          {renderContent()}
+        </main>
       </div>
+      {toast && <Toast msg={toast.msg} type={toast.type} onClose={() => setToast(null)} />}
     </div>
   );
 }
 
 export default function App() {
-  return <AppProvider><AppContent /></AppProvider>;
+  return (
+    <AppProvider>
+      <PortalApp />
+    </AppProvider>
+  );
 }
