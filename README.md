@@ -143,9 +143,9 @@ App runs at `http://localhost:5173`
 
 | Role | Email | Password |
 |---|---|---|
-| Employee | `niranjan@hechaar.com` | `ninja123` |
-| Employee | `priya@hechaar.com` | `priya123` |
-| Admin | `admin@hechaar.com` | `admin123` |
+| Employee | `niranjan@demo.com` | `ninja123` |
+| Employee | `priya@demo.com` | `priya123` |
+| Admin | `admin@demo.com` | `admin123` |
 
 Click any demo account card on the login screen to auto-fill credentials.
 
