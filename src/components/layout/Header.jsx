@@ -1,29 +1,31 @@
 import React, { useState, useEffect } from 'react';
+import Avatar from '../ui/Avatar';
 import { formatDate } from '../../utils/dateUtils';
 
-export default function Header({ activeTab, tabs }) {
-  const currentTab = tabs.find((t) => t.id === activeTab);
+export default function Header({ activeTab, tabs, currentUser }) {
+  const cur = tabs.find((t) => t.id === activeTab);
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
-    const timer = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(timer);
+    const t = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(t);
   }, []);
 
   return (
-    <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between shrink-0">
+    <header style={{ background: '#fff', borderBottom: '0.5px solid #e2e8f0', padding: '12px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
       <div>
-        <h2 className="text-xl font-semibold text-gray-800">{currentTab?.label}</h2>
-        <p className="text-sm text-gray-400">{formatDate(time)}</p>
+        <div style={{ fontSize: 16, fontWeight: 500, color: '#0f172a' }}>{cur?.label}</div>
+        <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 1 }}>{formatDate(time)}</div>
       </div>
-      <div className="flex items-center gap-4">
-        <span className="text-sm font-mono text-gray-500">
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <span style={{ fontSize: 12, fontFamily: 'monospace', color: '#94a3b8' }}>
           {time.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}
         </span>
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-200">
-          <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
-          Online
-        </span>
+        <div style={{ width: '0.5px', height: 14, background: '#e2e8f0' }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+          <Avatar name={currentUser.name} size={26} bg={currentUser.role === 'admin' ? '#7c3aed' : '#2563eb'} />
+          <span style={{ fontSize: 13, fontWeight: 500, color: '#64748b' }}>{currentUser.name.split(' ')[0]}</span>
+        </div>
       </div>
     </header>
   );
