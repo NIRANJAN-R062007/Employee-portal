@@ -1,6 +1,6 @@
 # 🏢 Employee Portal
 
-> An internal self-service portal for employees to log attendance, track daily progress, and manage leave requests — built with React, Vite, and Tailwind CSS. No backend required.
+> An internal self-service portal for employees to log attendance, track daily progress, and manage leave requests — with role-based login and an admin panel for HR. Built with React, Vite, and Tailwind CSS. No backend required.
 
 ![React](https://img.shields.io/badge/React-18.2-61DAFB?style=flat-square&logo=react)
 ![Vite](https://img.shields.io/badge/Vite-4.3-646CFF?style=flat-square&logo=vite)
@@ -10,6 +10,16 @@
 ---
 
 ## ✨ Features
+
+### 🔐 Login
+- Role-based authentication (Employee / Admin)
+- One-click demo account quick-fill for testing
+- Clean split-screen login UI with branding panel
+
+### 👤 Profile
+- View and edit personal details (name, phone, department)
+- Personal stats — attendance rate, tasks completed, leaves approved, days logged
+- Role and employee ID badge
 
 ### 📋 Attendance Logging
 - One-click **Clock In / Clock Out**
@@ -27,7 +37,14 @@
 - Status tracking — Pending, Approved, Rejected, Cancelled
 - Cancel pending requests anytime
 
+### 🛡️ Admin Panel *(Admin role only)*
+- **Leave approvals** — approve or reject pending requests with toast feedback
+- **All attendance** — view every employee's attendance records in one table
+- **All progress** — view every employee's logged tasks
+- Live stats — total employees, pending leaves, present today, late today
+
 ### 📊 Dashboard
+- Personalized greeting based on time of day
 - At-a-glance stat cards for today's status, tasks, and pending leaves
 - Recent progress and leave request previews
 - Live clock in the header
@@ -40,27 +57,39 @@
 employee-portal/
 ├── public/
 ├── src/
+│   ├── pages/
+│   │   └── LoginPage.jsx
 │   ├── components/
+│   │   ├── ui/
+│   │   │   ├── Badge.jsx
+│   │   │   ├── Avatar.jsx
+│   │   │   ├── Card.jsx
+│   │   │   ├── Btn.jsx
+│   │   │   ├── Toast.jsx
+│   │   │   ├── EmptyState.jsx
+│   │   │   └── FilterPills.jsx
 │   │   ├── layout/
 │   │   │   ├── Sidebar.jsx
 │   │   │   └── Header.jsx
 │   │   ├── dashboard/
 │   │   │   └── Dashboard.jsx
 │   │   ├── attendance/
-│   │   │   ├── AttendanceLogger.jsx
-│   │   │   └── AttendanceHistory.jsx
+│   │   │   └── AttendancePage.jsx
 │   │   ├── progress/
-│   │   │   ├── ProgressForm.jsx
-│   │   │   └── ProgressList.jsx
-│   │   └── leaves/
-│   │       ├── LeaveForm.jsx
-│   │       └── LeaveHistory.jsx
+│   │   │   └── ProgressPage.jsx
+│   │   ├── leaves/
+│   │   │   └── LeavePage.jsx
+│   │   ├── profile/
+│   │   │   └── ProfilePage.jsx
+│   │   └── admin/
+│   │       └── AdminPanel.jsx
 │   ├── context/
-│   │   └── AppContext.jsx       # Global state via React Context
+│   │   └── AppContext.jsx       # Global state — auth, attendance, progress, leaves, admin actions
 │   ├── hooks/
 │   │   └── useLocalStorage.js   # Persistent state hook
 │   ├── utils/
-│   │   └── dateUtils.js         # Date formatting and helpers
+│   │   ├── dateUtils.js         # Date formatting and helpers
+│   │   └── constants.js         # Demo users, status color maps
 │   ├── App.jsx
 │   └── main.jsx
 ├── index.html
@@ -78,6 +107,7 @@ employee-portal/
 | React 18 | UI framework |
 | Vite 4 | Build tool and dev server |
 | Tailwind CSS 3 | Styling |
+| Tabler Icons | Icon set |
 | React Context API | Global state management |
 | localStorage | Client-side data persistence |
 
@@ -109,17 +139,29 @@ App runs at `http://localhost:5173`
 
 ---
 
+## 🔑 Demo Accounts
+
+| Role | Email | Password |
+|---|---|---|
+| Employee | `niranjan@hechaar.com` | `ninja123` |
+| Employee | `priya@hechaar.com` | `priya123` |
+| Admin | `admin@hechaar.com` | `admin123` |
+
+Click any demo account card on the login screen to auto-fill credentials.
+
+---
+
 ## 💾 Data Storage
 
-All data is stored in the browser's **localStorage** under these keys:
+All transactional data is stored in the browser's **localStorage** under these keys:
 
 | Key | Data |
 |---|---|
-| `ep_attendance` | Clock in/out records |
-| `ep_progress` | Daily task entries |
-| `ep_leaves` | Leave request history |
+| `ep_attendance` | Clock in/out records (all employees) |
+| `ep_progress` | Daily task entries (all employees) |
+| `ep_leaves` | Leave request history (all employees) |
 
-No database, no backend, no setup — it just works.
+User accounts are currently defined in `src/utils/constants.js` for demo purposes — no database required.
 
 ---
 
@@ -135,11 +177,11 @@ Output goes to the `dist/` folder. Deploy anywhere — Vercel, Netlify, GitHub P
 
 ## 🔮 Planned Features
 
-- [ ] Admin panel to approve / reject leave requests
+- [ ] Authentication with Supabase (replace hardcoded demo users)
 - [ ] Export attendance and progress as CSV
 - [ ] Weekly progress summary (Gemini AI integration)
-- [ ] Authentication with Supabase
 - [ ] Push notifications for leave status updates
+- [ ] Forgot password flow
 
 ---
 
