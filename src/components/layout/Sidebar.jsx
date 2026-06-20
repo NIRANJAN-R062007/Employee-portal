@@ -1,62 +1,63 @@
 import React from 'react';
+import Avatar from '../ui/Avatar';
 
-const ICONS = {
-  dashboard: (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-    </svg>
-  ),
-  attendance: (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  ),
-  progress: (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-    </svg>
-  ),
-  leaves: (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-    </svg>
-  ),
-};
-
-export default function Sidebar({ activeTab, setActiveTab, tabs }) {
+export default function Sidebar({ activeTab, setTab, currentUser, tabs, onLogout }) {
   return (
-    <aside className="w-60 bg-gray-900 text-white flex flex-col shrink-0">
-      <div className="px-5 py-6 border-b border-gray-700">
-        <h1 className="text-lg font-bold tracking-tight">Employee Portal</h1>
-        <p className="text-xs text-gray-400 mt-0.5">Hechaar · Internal</p>
+    <aside style={{ width: 216, background: '#0f172a', display: 'flex', flexDirection: 'column', flexShrink: 0 }}>
+      {/* Logo */}
+      <div style={{ padding: '18px 16px', borderBottom: '0.5px solid rgba(255,255,255,.07)', display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{ width: 32, height: 32, background: '#2563eb', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <i className="ti ti-building" style={{ fontSize: 16, color: '#fff' }} />
+        </div>
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: '#f1f5f9' }}>Employee Portal</div>
+          <div style={{ fontSize: 10, color: '#475569' }}>Hechaar · Internal</div>
+        </div>
       </div>
-      <nav className="flex-1 px-3 py-4 space-y-1">
-        {tabs.map((tab) => (
+
+      {/* Nav */}
+      <nav style={{ flex: 1, padding: '10px 8px', display: 'flex', flexDirection: 'column', gap: 1 }}>
+        {tabs.map((t) => (
           <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-              activeTab === tab.id
-                ? 'bg-blue-600 text-white'
-                : 'text-gray-400 hover:bg-gray-800 hover:text-white'
-            }`}
+            key={t.id}
+            onClick={() => setTab(t.id)}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 9,
+              padding: '8px 11px', borderRadius: 8, fontSize: 13,
+              fontWeight: activeTab === t.id ? 500 : 400,
+              background: activeTab === t.id ? 'rgba(37,99,235,.9)' : 'transparent',
+              color: activeTab === t.id ? '#fff' : '#94a3b8',
+              border: 'none', cursor: 'pointer', textAlign: 'left', width: '100%',
+            }}
           >
-            {ICONS[tab.id]}
-            {tab.label}
+            <i className={`ti ${t.icon}`} style={{ fontSize: 15, flexShrink: 0 }} />
+            <span style={{ flex: 1 }}>{t.label}</span>
+            {t.badge && (
+              <span style={{ background: '#ef4444', color: '#fff', borderRadius: 10, fontSize: 10, padding: '1px 5px', fontWeight: 700 }}>
+                {t.badge}
+              </span>
+            )}
           </button>
         ))}
       </nav>
-      <div className="px-4 py-4 border-t border-gray-700 flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-sm font-bold shrink-0">
-          N
-        </div>
-        <div className="min-w-0">
-          <p className="text-sm font-medium text-white truncate">Niranjan R</p>
-          <p className="text-xs text-gray-400 truncate">AI HR Engineer</p>
+
+      {/* Sign out */}
+      <div style={{ padding: '8px 8px 4px', borderTop: '0.5px solid rgba(255,255,255,.07)' }}>
+        <button
+          onClick={onLogout}
+          style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '8px 11px', borderRadius: 8, fontSize: 13, color: '#64748b', background: 'transparent', border: 'none', cursor: 'pointer', width: '100%' }}
+        >
+          <i className="ti ti-logout" style={{ fontSize: 15 }} />
+          Sign out
+        </button>
+      </div>
+
+      {/* User */}
+      <div style={{ padding: '12px 14px', borderTop: '0.5px solid rgba(255,255,255,.07)', display: 'flex', alignItems: 'center', gap: 10 }}>
+        <Avatar name={currentUser.name} size={32} bg={currentUser.role === 'admin' ? '#7c3aed' : '#2563eb'} />
+        <div style={{ minWidth: 0 }}>
+          <div style={{ fontSize: 12, fontWeight: 500, color: '#f1f5f9', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{currentUser.name}</div>
+          <div style={{ fontSize: 10, color: '#475569' }}>{currentUser.role === 'admin' ? 'HR Admin' : 'Employee'}</div>
         </div>
       </div>
     </aside>
