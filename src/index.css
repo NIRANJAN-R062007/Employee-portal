@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+input, select, textarea {
+  font-family: inherit;
+  background: white;
+  color: #0f172a;
+  border: 0.5px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 9px 12px;
+  width: 100%;
+  outline: none;
+  font-size: 13px;
+  transition: border-color .15s, box-shadow .15s;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+}
+input:disabled { opacity: .5; cursor: not-allowed; }
+textarea { resize: none; }
+button { font-family: inherit; cursor: pointer; transition: all .15s; }
