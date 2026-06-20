@@ -28,8 +28,8 @@ export default function LoginPage({ onLogin }) {
   ];
 
   const demos = [
-    { role: 'employee', email: 'niranjan@hechaar.com', pass: 'ninja123', name: 'Niranjan R' },
-    { role: 'admin', email: 'admin@hechaar.com', pass: 'admin123', name: 'HR Admin' },
+    { role: 'employee', email: 'niranjan@demo.com', pass: 'ninja123', name: 'Niranjan R' },
+    { role: 'admin', email: 'admin@demo.com', pass: 'admin123', name: 'HR Admin' },
   ];
 
   return (
@@ -71,7 +71,7 @@ export default function LoginPage({ onLogin }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 20 }}>
               <div>
                 <label style={{ fontSize: 12, fontWeight: 500, color: '#64748b', display: 'block', marginBottom: 5 }}>Email address</label>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@hechaar.com" onKeyDown={(e) => e.key === 'Enter' && login()} />
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@demo.com" onKeyDown={(e) => e.key === 'Enter' && login()} />
               </div>
               <div>
                 <label style={{ fontSize: 12, fontWeight: 500, color: '#64748b', display: 'block', marginBottom: 5 }}>Password</label>

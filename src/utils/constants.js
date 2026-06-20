@@ -2,7 +2,7 @@ export const USERS = [
   {
     id: 1,
     name: 'Niranjan R',
-    email: 'niranjan@hechaar.com',
+    email: 'niranjan@demo.com',
     password: 'ninja123',
     role: 'employee',
     dept: 'AI & Engineering',
@@ -12,7 +12,7 @@ export const USERS = [
   {
     id: 2,
     name: 'Priya S',
-    email: 'priya@hechaar.com',
+    email: 'priya@demo.com',
     password: 'priya123',
     role: 'employee',
     dept: 'Product Design',
@@ -22,7 +22,7 @@ export const USERS = [
   {
     id: 3,
     name: 'HR Admin',
-    email: 'admin@hechaar.com',
+    email: 'admin@demo.com',
     password: 'admin123',
     role: 'admin',
     dept: 'Human Resources',
